@@ -7,6 +7,18 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(sf)
+library(raster)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(sp)
+library(rworldxtra)
+library(gstat)
+library(rgdal)
+library(ggspatial)
 ```
 
 ## R Markdown
