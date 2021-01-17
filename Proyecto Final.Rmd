@@ -2,11 +2,15 @@
 title: "Modelos para explicar abundancia de aves en el Sur de Chile"
 author: "Castro, S., Insunza, D. y Pizarro, R."
 date: "17-01-2021"
-output: html_document
+output: 
+  bookdown::html_document2:
+    figure_caption: true
+    toc: false
+
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, comment=FALSE, message=FALSE, warning=FALSE)
 library(tidyverse)
 library(sf)
 library(raster)
@@ -33,6 +37,18 @@ Mapa = getData(name = "GADM", country = "CHL", level = 2) %>% st_as_sf() %>% dpl
 
 
 VARstack = read_rds("Stack.rds")
+
+```
+
+```{r MapaDiversidad}
+ggplot() + theme_minimal()+ geom_sf(data = Mapa) + geom_sf(data = Diversidad, aes(color = DvrsddA)) + scale_color_viridis_c(name = "N° de especies")
+
+
+```
+
+```{r MapasVariables}
+
+plot(VARstack)
 
 ```
 
