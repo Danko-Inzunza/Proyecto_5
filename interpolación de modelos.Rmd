@@ -1,0 +1,100 @@
+---
+title: "Interpolación de modelos"
+author: "Ricardo_Pizarro"
+date: "18-01-2021"
+output: 
+  bookdown::html_document2:
+    figure_caption: true
+    toc: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(sp)
+library(rworldxtra)
+library(gstat)
+library(rgdal)
+library(ggspatial)
+
+```
+
+```{r}
+Diversidad <- read_sf("Diversidad.shp")
+
+Stack <- read_rds("Stack.rds")
+```
+
+```{r}
+Chile <- getData("GADM", country = "CHL", level = 1) %>% 
+  st_as_sf() %>% 
+  dplyr::filter(NAME_1 %in% c("Los Ríos", "Los Lagos", "Araucanía")) %>% 
+  st_make_valid()
+
+ggplot() + 
+  geom_sf(data = Chile) + 
+  geom_sf(data = Diversidad, aes(color = DvrsddA)) +
+  scale_color_viridis_c(name = "Riqueza de especies") +
+  theme_bw()
+```
+
+```{r}
+plot(Stack)
+```
+
+```{r}
+Variables_DF = Stack %>% raster::extract(Diversidad) %>% as.data.frame()
+Diversidad_2 = bind_cols(Diversidad, Variables_DF)
+Diver_2 = Diversidad_2 %>% as_Spatial()
+
+NewVars_DF <-  Stack %>% as("SpatialPixelsDataFrame") %>% as.data.frame() %>% st_as_sf(coords = c(6,7), crs = "+proj=longlat +datum=WGS84 +no_defs") %>%  as_Spatial()
+```
+
+```{r}
+Z_vgm_null <- variogram(log(DvrsddA) ~ 1 , data = Diver_2) %>% mutate(Modelo = "Diversidad")
+
+Z_vgm_null_1 <- variogram(log(ModificacionHumana) ~ 1 , data = Diver_2) %>% mutate(Modelo = "Modificación Humana")
+
+Z_vgm_null_2 <- variogram(log(TempMedia) ~ 1 , data = Diver_2) %>% mutate(Modelo = "TempMedia")
+
+Z_vgm_null_3 <- variogram(log(RangoTempDiario) ~ 1 , data = Diver_2) %>% mutate(Modelo = "RangoTempDiario")
+
+Z_vgm_null_4 <- variogram(log(PrecAnual) ~ 1 , data = Diver_2) %>% mutate(Modelo = "PrecAnual")
+
+Z_vgm_null_5 <- variogram(log(EstacionalidadPrec) ~ 1 , data = Diver_2) %>% mutate(Modelo = "EstacionalidadPrec")
+
+```
+
+```{r}
+#ggplot(Z_vgm_null, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+#ggplot(Z_vgm_null_1, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+#ggplot(Z_vgm_null_2, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+#ggplot(Z_vgm_null_3, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+#ggplot(Z_vgm_null_4, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+#ggplot(Z_vgm_null_5, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+Z_vgm <- rbind(Z_vgm_null, Z_vgm_null_1, Z_vgm_null_2, Z_vgm_null_3, Z_vgm_null_4, Z_vgm_null_5)
+
+ggplot(Z_vgm, aes(x = dist, y = gamma, color = Modelo)) + geom_path() + geom_point() + theme_bw()
+
+```
+
+```{r}
+Z_vgm_spatial <- variogram(log(DvrsddA) ~  + coords.x1 + coords.x2 , data = Diver_2) %>% mutate(Modelo = "Espacial")
+
+ggplot(Z_vgm_spatial, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+
+```
+
