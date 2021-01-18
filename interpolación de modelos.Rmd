@@ -33,10 +33,7 @@ Stack <- read_rds("Stack.rds")
 ```
 
 ```{r}
-Chile <- getData("GADM", country = "CHL", level = 1) %>% 
-  st_as_sf() %>% 
-  dplyr::filter(NAME_1 %in% c("Los Ríos", "Los Lagos", "Araucanía")) %>% 
-  st_make_valid()
+#Chile <- getData("GADM", country = "CHL", level = 1) %>%  st_as_sf() %>%  dplyr::filter(NAME_1 %in% c("Los Ríos", "Los Lagos", "Araucanía")) %>% st_make_valid()
 
 ggplot() + 
   geom_sf(data = Chile) + 
@@ -60,41 +57,25 @@ NewVars_DF <-  Stack %>% as("SpatialPixelsDataFrame") %>% as.data.frame() %>% st
 ```{r}
 Z_vgm_null <- variogram(log(DvrsddA) ~ 1 , data = Diver_2) %>% mutate(Modelo = "Diversidad")
 
-Z_vgm_null_1 <- variogram(log(ModificacionHumana) ~ 1 , data = Diver_2) %>% mutate(Modelo = "Modificación Humana")
-
-Z_vgm_null_2 <- variogram(log(TempMedia) ~ 1 , data = Diver_2) %>% mutate(Modelo = "TempMedia")
-
-Z_vgm_null_3 <- variogram(log(RangoTempDiario) ~ 1 , data = Diver_2) %>% mutate(Modelo = "RangoTempDiario")
-
-Z_vgm_null_4 <- variogram(log(PrecAnual) ~ 1 , data = Diver_2) %>% mutate(Modelo = "PrecAnual")
-
-Z_vgm_null_5 <- variogram(log(EstacionalidadPrec) ~ 1 , data = Diver_2) %>% mutate(Modelo = "EstacionalidadPrec")
-
-```
-
-```{r}
-#ggplot(Z_vgm_null, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
-
-#ggplot(Z_vgm_null_1, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
-
-#ggplot(Z_vgm_null_2, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
-
-#ggplot(Z_vgm_null_3, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
-
-#ggplot(Z_vgm_null_4, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
-
-#ggplot(Z_vgm_null_5, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
-
-Z_vgm <- rbind(Z_vgm_null, Z_vgm_null_1, Z_vgm_null_2, Z_vgm_null_3, Z_vgm_null_4, Z_vgm_null_5)
-
-ggplot(Z_vgm, aes(x = dist, y = gamma, color = Modelo)) + geom_path() + geom_point() + theme_bw()
-
-```
-
-```{r}
 Z_vgm_spatial <- variogram(log(DvrsddA) ~  + coords.x1 + coords.x2 , data = Diver_2) %>% mutate(Modelo = "Espacial")
 
-ggplot(Z_vgm_spatial, aes(x = dist, y = gamma, color = Modelo)) +  geom_path() + geom_point() + theme_bw()
+Z_vgm_relacion <- variogram(log(DvrsddA) ~ ModificacionHumana + I(ModificacionHumana^2) + TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + PrecAnual + I(PrecAnual^2) + PrecAnual + I(PrecAnual^2) + EstacionalidadPrec + I(EstacionalidadPrec^2), data = Diver_2) %>% mutate(Modelo = "Interacción")
+
+Z_vgm_relacion2 <- variogram(log(DvrsddA) ~ TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diver_2) %>% mutate(Modelo = "Interacción2")
+```
+
+```{r}
+Z_vgm <- rbind(Z_vgm_null, Z_vgm_spatial, Z_vgm_relacion, Z_vgm_relacion2)
+
+
+ggplot(Z_vgm, aes(x = dist, y = gamma, color = Modelo)) + 
+  geom_path() + 
+  geom_point() +
+  theme_bw()
+```
+
+```{r}
+
 
 ```
 
