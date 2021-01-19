@@ -1,5 +1,5 @@
 ---
-title: "Proyecto N° 5"
+title: "Proyecto: Moldelos de Diversidad de Especies de Aver en el Sur de Chile"
 author: "Castro, S., Inzunza, D. y Pizarro, R."
 output:
   bookdown::html_document2:
@@ -127,7 +127,7 @@ ggplot(Diversidad_2, aes(x = TempMedia, y = ModificacionHumana)) + geom_point()+
 Z_vgm <- rbind(Z_vgm_null, Z_vgm_spatial, Z_vgm_interaccion1, Z_vgm_interaccion2, Z_vgm_mixto, Z_vgm_mixto2, Z_vgm_mixto3)
 
 ggplot(Z_vgm, aes(x = dist, y = gamma, color = Modelo)) + geom_path() + geom_point() + theme_bw() + 
-labs(x = "Distancia", y = "Semivarianza", title = "Variogramas de los modelos espaciales")
+labs(x = "Distancia (m)", y = "Semivarianza", title = "Variogramas de los modelos espaciales")
 
 ```
 
@@ -154,22 +154,22 @@ Abn_fit_Mixto2 <- fit.variogram(Z_vgm_mixto2, model = vgm(1, "Sph", 700, 1))
 Abn_fit_Mixto3 <- fit.variogram(Z_vgm_mixto3, model = vgm(1, "Sph", 700, 1))
 ```
 
-## Código y gráficas
+## Código y gráficas de variogramas
 
 ```{r , echo= TRUE}
-ggplot(Z_vgm_null, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.05698552, lty = 2) + geom_vline(xintercept = 80.19058, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Nulo") 
+ggplot(Z_vgm_null, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.05698552, lty = 2) + geom_vline(xintercept = 80.19058, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Nulo") 
 
-ggplot(Z_vgm_spatial, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.05458574, lty = 2) + geom_vline(xintercept = 75.58536, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Espacial")
+ggplot(Z_vgm_spatial, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.05458574, lty = 2) + geom_vline(xintercept = 75.58536, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Espacial")
 
-ggplot(Z_vgm_interaccion1, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.03680731, lty = 2) + geom_vline(xintercept = 62.5634, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Interacción 1")
+ggplot(Z_vgm_interaccion1, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.03680731, lty = 2) + geom_vline(xintercept = 62.5634, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Interacción 1")
 
-ggplot(Z_vgm_interaccion2, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 4.196248e-05 + 3.370992e-02, lty = 2) + geom_vline(xintercept = 61.50199, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Interacción 2")
+ggplot(Z_vgm_interaccion2, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 4.196248e-05 + 3.370992e-02, lty = 2) + geom_vline(xintercept = 61.50199, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Interacción 2")
 
-ggplot(Z_vgm_mixto, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.03413205, lty = 2) + geom_vline(xintercept = 61.85772, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Mixto 1")
+ggplot(Z_vgm_mixto, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.03413205, lty = 2) + geom_vline(xintercept = 61.85772, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Mixto 1")
 
-ggplot(Z_vgm_mixto2, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.04281398, lty = 2) + geom_vline(xintercept = 69.32882, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Mixto 2")
+ggplot(Z_vgm_mixto2, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.04281398, lty = 2) + geom_vline(xintercept = 69.32882, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Mixto 2")
 
-ggplot(Z_vgm_mixto3, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.03673725, lty = 2) + geom_vline(xintercept = 63.00708, lty = 2) + theme_bw() + labs(x = "Distancia", y = "Semivarinza", title = "Modelo Mixto 3")
+ggplot(Z_vgm_mixto3, aes(x = dist, y = gamma)) + geom_point() + geom_hline(yintercept = 0.03673725, lty = 2) + geom_vline(xintercept = 63.00708, lty = 2) + theme_bw() + labs(x = "Distancia (m)", y = "Semivarinza", title = "Modelo Mixto 3")
 ```
 
 
@@ -321,27 +321,28 @@ ggplot() + geom_sf(data = Pred, aes(color = exp(var1.pred))) + scale_color_virid
 ggplot() + geom_sf(data = Pred, aes(color = exp(var1.var))) + scale_color_viridis_c(name= "Varianza") +  facet_wrap(~ Modelo) +  theme_bw() + theme(axis.text.x = element_text(angle =90, vjust = 0.5, hjust=1))
 ```
 
-# Validación
+# Validación de las predicciones
 
-## Código de Validación
+## validación cruzada
 
 ```{r ,echo= TRUE}
-Null_CV <- krige.cv(log(DvrsddA) ~ 1, Diver_2, model = Abn_fit_null, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Nulo")
+Null_CV <- krige.cv(log(DvrsddA) ~ 1, Diver_2, model = Abn_fit_null, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Nulo")
 
-Spat_CV <- krige.cv(log(DvrsddA) ~ coords.x1 + coords.x2, Diver_2, model = Abn_fit_Spat, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Espacial")
+Spat_CV <- krige.cv(log(DvrsddA) ~ coords.x1 + coords.x2, Diver_2, model = Abn_fit_Spat, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Espacial")
 
-Interaccion1_CV <- krige.cv(log(DvrsddA) ~ ModificacionHumana + I(ModificacionHumana^2) + TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + PrecAnual + I(PrecAnual^2) + PrecAnual + I(PrecAnual^2) + EstacionalidadPrec + I(EstacionalidadPrec^2), Diver_2, model = Abn_fit_Interaccion1, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Interacción 1")
+Interaccion1_CV <- krige.cv(log(DvrsddA) ~ ModificacionHumana + I(ModificacionHumana^2) + TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + PrecAnual + I(PrecAnual^2) + PrecAnual + I(PrecAnual^2) + EstacionalidadPrec + I(EstacionalidadPrec^2), Diver_2, model = Abn_fit_Interaccion1, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Interacción 1")
 
-Interaccion2_CV <- krige.cv(log(DvrsddA) ~ TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), Diver_2, model = Abn_fit_Interaccion2, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Interacción 2")
+Interaccion2_CV <- krige.cv(log(DvrsddA) ~ TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), Diver_2, model = Abn_fit_Interaccion2, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Interacción 2")
 
-Mixto_CV <- krige.cv(log(DvrsddA) ~ (coords.x1 + coords.x2) + TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec, Diver_2, model = Abn_fit_Mixto, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Mixto 1")
+Mixto_CV <- krige.cv(log(DvrsddA) ~ (coords.x1 + coords.x2) + TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec, Diver_2, model = Abn_fit_Mixto, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Mixto 1")
 
-Mixto2_CV <- krige.cv(log(DvrsddA) ~ (coords.x1 + coords.x2) + ModificacionHumana + I(ModificacionHumana^2), Diver_2, model = Abn_fit_Mixto2, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Mixto 2")
+Mixto2_CV <- krige.cv(log(DvrsddA) ~ (coords.x1 + coords.x2) + ModificacionHumana + I(ModificacionHumana^2), Diver_2, model = Abn_fit_Mixto2, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Mixto 2")
 
-Mixto3_CV <- krige.cv(log(DvrsddA) ~ ModificacionHumana*TempMedia + I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), Diver_2, model = Abn_fit_Mixto2, nfold = 7) %>% st_as_sf() %>% mutate(Modelo = "Mixto 3")
+Mixto3_CV <- krige.cv(log(DvrsddA) ~ ModificacionHumana*TempMedia + I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), Diver_2, model = Abn_fit_Mixto2, nfold = 5) %>% st_as_sf() %>% mutate(Modelo = "Mixto 3")
 
 
 ```
+## Tabla de Root Mean Square Error
 
 ```{r ,echo= TRUE}
 
@@ -353,17 +354,77 @@ Resumen <- Pred_CV %>% as.data.frame() %>% group_by(Modelo) %>%
 
 kable(Resumen) %>% kable_styling()
 
+# x es nuestro error
 ```
+
+## Fold de los Residuales del Modelo Mixto 3
 
 ```{r ,echo= TRUE}
 
-ggplot() + geom_sf(data = Pred_CV, aes(color = residual)) + facet_wrap(~fold) + scale_color_viridis_c()+ theme(axis.text.x = element_text(angle =90, vjust = 0.5, hjust=1))
-
+ggplot() + geom_sf(data = Mixto3_CV, aes(color = residual)) + scale_color_viridis_c(name ="Residual") + facet_wrap(~fold) +theme_bw() + theme(axis.text.x = element_text(angle =90, vjust = 0.5, hjust=1))
 
 ```
+
+## Variograma de los Residuales del modelo escogido
+
+```{r ,echo= TRUE}
+Var1 <- variogram(residual ~ 1, Mixto3_CV)
+
+ggplot(Var1, aes(x = dist, y = gamma)) + geom_point() + theme_bw() + xlab("Ditancia metros") + ylim(c(0, max(Var1$gamma))) + labs(y = "Semivarianza", x = "Distancia (m)", title = "Variograma de los Residuales Modelo Mixto 3")
+```
+## Modelo escogido Mixto 3
+
+```{r ,echo=TRUE}
+Z_vgm_mixto3 <- variogram(log(DvrsddA) ~ ModificacionHumana*TempMedia + I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diver_2) %>% mutate(Modelo = "Mixto 3")
+```
+
 
 ```{r}
-#Var <- variogram(residual ~ 1, Dist_CV)
-#ggplot(Var, aes(x = dist, y = gamma)) + geom_point() + theme_bw() + xlab("Ditancia metros") + ylim(c(0, max(Var$gamma)))
+ggplot() + 
+  geom_sf(data = Mixto3_pred, aes(color = exp(var1.pred))) + 
+  scale_color_viridis_c(name= "Diversidad") + labs(title = "Predicciones Modelo Mixto 3") + theme_bw()
+
+```
+# Otros modelos considerados anteriormente
+
+## Modelos
+
+
+```{r BasesDeDato, echo=TRUE}
+Variables_DF = Stack %>% raster::extract(Diversidad) %>% as.data.frame()
+Diversidad_2 = bind_cols(Diversidad, Variables_DF)
 ```
 
+
+## Modelos individuales
+
+```{r , Modelos_y_su_R^2, echo=TRUE}
+M_HUM = lm(DvrsddA ~ I((ModificacionHumana)^2), data = Diversidad_2)
+# 0.202
+M_Temp = lm(DvrsddA ~ TempMedia + I((TempMedia)^2) , data = Diversidad_2)
+#0.243
+M_TDia = lm(DvrsddA ~ RangoTempDiario + I((RangoTempDiario)^2) , data = Diversidad_2)
+#0.0225
+M_PreAN = lm(DvrsddA ~ PrecAnual + I((PrecAnual)^2), data = Diversidad_2)
+#0.0496
+M_est = lm(DvrsddA ~ EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad_2)
+#0.000481
+```
+
+## Modelo combinado
+
+```{r, echo=TRUE}
+
+MGENERAL1 = glm(DvrsddA ~ TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad_2, family = poisson)
+```
+
+# Predicción en "glm"
+
+```{r, echo=TRUE}
+Raster1 = predict(Stack, MGENERAL1,type = "response")
+
+Raster_DF1 = Raster1 %>% as("SpatialPixelsDataFrame") %>% as.data.frame()
+
+
+ggplot() + geom_raster(data = Raster_DF1, aes(x = x, y = y, fill = layer)) + geom_sf(data = Chile, alpha = 0) + scale_fill_viridis_c(option = "plasma", name = "Diversidad"  ) + labs(x = "Longitud", y = "Latitud", title = "Diversidad de aves desde la región Los Lagos hasta La Araucanía") + theme_bw()
+```
