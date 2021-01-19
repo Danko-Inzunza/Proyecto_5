@@ -32,8 +32,7 @@ library(ggspatial)
 
 Diversidad = read_sf("Diversidad.shp")
 
-Mapa = getData(name = "GADM", country = "CHL", level = 2) %>% st_as_sf() %>% dplyr::filter(NAME_1 %in% c("Los Ríos", "Los Lagos", "Araucanía")) %>% 
-  st_make_valid()
+Mapa = getData(name = "GADM", country = "CHL", level = 2) %>% st_as_sf() %>% dplyr::filter(NAME_1 %in% c("Los Ríos", "Los Lagos", "Araucanía")) %>% st_make_valid()
 
 
 VARstack = read_rds("Stack.rds")
@@ -52,8 +51,131 @@ plot(VARstack)
 
 ```
 
-Modelos
+##Modelos
 ```{r}
 Clima <- raster::extract(VARstack, Diversidad) %>% as.data.frame()
 Diversidad <- Diversidad %>% bind_cols(Clima)
 ```
+
+
+##Exploramos
+
+```{r}
+ggplot(Clima, aes(x = ModificacionHumana, y = TempMedia)) + geom_point()
+ggplot(Clima, aes(x = TempMedia, y = ModificacionHumana)) + geom_point()
+ggplot(Clima, aes(x = RangoTempDiario, y = TempMedia)) + geom_point()
+ggplot(Clima, aes(x = ModificacionHumana, y = RangoTempDiario)) + geom_point()
+ggplot(Clima, aes(x = TempMedia, y = RangoTempDiario)) + geom_point()
+ggplot(Clima, aes(x =EstacionalidadPrec, y = TempMedia)) + geom_point()
+ggplot(Clima, aes(x = ModificacionHumana, y = EstacionalidadPrec)) + geom_point()
+ggplot(Clima, aes(x = PrecAnual, y = EstacionalidadPrec)) + geom_point()
+ggplot(Clima, aes(x = PrecAnual, y = TempMedia)) + geom_point()
+```
+```{r}
+ggplot(Diversidad, aes(x = PrecAnual, y = DvrsddA)) + geom_point()
+ggplot(Diversidad, aes(x = TempMedia, y = DvrsddA)) + geom_point()
+ggplot(Diversidad, aes(x = ModificacionHumana, y = DvrsddA)) + geom_point()
+ggplot(Diversidad, aes(x = RangoTempDiario, y = DvrsddA)) + geom_point()
+ggplot(Diversidad, aes(x = EstacionalidadPrec, y = DvrsddA)) + geom_point()
+
+```
+Modelos
+```{r}
+FitLM_Riqueza <- lm(DvrsddA ~ ModificacionHumana + I(ModificacionHumana^2) + TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + PrecAnual + I(PrecAnual^2) + PrecAnual + I(PrecAnual^2) + EstacionalidadPrec + I(EstacionalidadPrec^2), data = Diversidad)
+
+FitLM_Riqueza2 <- lm(DvrsddA ~ TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + ModificacionHumana + I(ModificacionHumana^2), data = Diversidad)
+
+FitLM_Riqueza3 <- lm(DvrsddA ~  TempMedia*EstacionalidadPrec + I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad)
+
+FitLM_Riqueza4 = lm(DvrsddA ~ TempMedia*EstacionalidadPrec*ModificacionHumana +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad)
+
+summary(FitLM_Riqueza)
+summary(FitLM_Riqueza2)
+summary(FitLM_Riqueza3)
+summary(FitLM_Riqueza4)
+
+
+
+```
+
+```{r}
+riqueza_especies_aves <- predict(VARstack, FitLM_Riqueza2)
+plot(FitLM_Riqueza2)
+```
+```{r}
+riqueza_especies_avesw <- predict(VARstack, FitLM_Riqueza)
+plot(riqueza_especies_avesw)
+```
+```{r}
+FitLM_Riqueza5 <- glm(DvrsddA ~ ModificacionHumana + I(ModificacionHumana^2) + TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + PrecAnual + I(PrecAnual^2) + PrecAnual + I(PrecAnual^2) + EstacionalidadPrec + I(EstacionalidadPrec^2), data = Diversidad, family = poisson)
+
+FitLM_Riqueza6 <- glm(DvrsddA ~ TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + ModificacionHumana + I(ModificacionHumana^2), data = Diversidad, family = poisson)
+
+FitLM_Riqueza7 <- glm(DvrsddA ~  TempMedia*EstacionalidadPrec + I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad, family = poisson)
+
+FitLM_Riqueza8 = glm(DvrsddA ~ TempMedia*EstacionalidadPrec*ModificacionHumana +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad, family = poisson)
+
+summary(FitLM_Riqueza5)
+summary(FitLM_Riqueza6)
+summary(FitLM_Riqueza7)
+summary(FitLM_Riqueza8)
+
+FitLM_Riquez <- lm(DvrsddA ~ ModificacionHumana + I(ModificacionHumana^2) + TempMedia + I(TempMedia^2) + RangoTempDiario + I(RangoTempDiario^2) + PrecAnual + I(PrecAnual^2) + PrecAnual + I(PrecAnual^2) + EstacionalidadPrec + I(EstacionalidadPrec^2), data = Diversidad)
+
+```
+
+```{r}
+riqueza_especies <- predict(VARstack, FitLM_Riqueza6, type = "response")
+plot(riqueza_especies)
+
+riqueza_especies_B <- predict(VARstack, FitLM_Riquez, type = "response")
+plot(riqueza_especies_B)
+
+
+riqueza_especies2 <- predict(VARstack, FitLM_Riqueza8, type = "response")
+plot(riqueza_especies2)
+
+
+
+```
+```{r}
+V2 = glm(DvrsddA ~ TempMedia*EstacionalidadPrec*ModificacionHumana +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad, family = poisson)
+
+V2_2= lm(DvrsddA ~ TempMedia*EstacionalidadPrec*ModificacionHumana +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad)
+
+riqueza_especies_B <- predict(VARstack, V2, type = "response")
+plot(riqueza_especies_B)
+
+riqueza_especies_B2 <- predict(VARstack, V2_2)
+plot(riqueza_especies_B2)
+
+broom::glance(V2_2)
+
+```
+
+```{r}
+
+MGENERAL = lm(DvrsddA ~ TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad)
+
+Raster = predict(VARstack, MGENERAL)
+
+Raster_DF = Raster %>% as("SpatialPixelsDataFrame") %>% as.data.frame()
+
+
+ggplot() + geom_raster(data = Raster_DF, aes(x = x, y = y, fill = layer)) + geom_sf(data = Mapa, alpha = 0) + scale_fill_viridis_c(option = "plasma", name = "Diversidad"  ) + labs(x = "Longitud", y = "Latitud", title = "Diversidad de aves desde la región Los Lagos hasta La Araucanía") + theme_bw()
+
+### 
+
+MGENERAL1 = glm(DvrsddA ~ TempMedia*(RangoTempDiario*ModificacionHumana)*EstacionalidadPrec +  I((ModificacionHumana)^2) + I((TempMedia)^2) + RangoTempDiario + I((RangoTempDiario)^2) + EstacionalidadPrec + I((EstacionalidadPrec)^2), data = Diversidad, family = poisson)
+
+Raster1 = predict(VARstack, MGENERAL1,type = "response")
+
+Raster_DF1 = Raster1 %>% as("SpatialPixelsDataFrame") %>% as.data.frame()
+
+
+ggplot() + geom_raster(data = Raster_DF1, aes(x = x, y = y, fill = layer)) + geom_sf(data = Mapa, alpha = 0) + scale_fill_viridis_c(option = "plasma", name = "Diversidad"  ) + labs(x = "Longitud", y = "Latitud", title = "Diversidad de aves desde la región Los Lagos hasta La Araucanía") + theme_bw()
+
+##NewVars_DF <-  Vars %>% as("SpatialPixelsDataFrame") %>% as.data.frame() %>% st_as_sf(coords = c(6,7), crs = "+proj=longlat +datum=WGS84 +no_defs") %>%  as_Spatial()
+
+```
+
