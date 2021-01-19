@@ -48,6 +48,7 @@ ggplot() +
   geom_sf(data = Diversidad, aes(color = DvrsddA)) +
   scale_color_viridis_c(name = "Riqueza de especies") +
   theme_bw()
+#.
 
 ```
 
