@@ -48,7 +48,6 @@ ggplot() +
   geom_sf(data = Diversidad, aes(color = DvrsddA)) +
   scale_color_viridis_c(name = "Riqueza de especies") +
   theme_bw()
-#.
 
 ```
 
@@ -373,6 +372,7 @@ Var1 <- variogram(residual ~ 1, Mixto3_CV)
 
 ggplot(Var1, aes(x = dist, y = gamma)) + geom_point() + theme_bw() + xlab("Ditancia metros") + ylim(c(0, max(Var1$gamma))) + labs(y = "Semivarianza", x = "Distancia (m)", title = "Variograma de los Residuales Modelo Mixto 3")
 ```
+
 ## Modelo escogido Mixto 3
 
 ```{r ,echo=TRUE}
@@ -386,6 +386,7 @@ ggplot() +
   scale_color_viridis_c(name= "Diversidad") + labs(title = "Predicciones Modelo Mixto 3") + theme_bw()
 
 ```
+
 # Otros modelos considerados anteriormente
 
 ## Modelos
